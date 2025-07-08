@@ -1,0 +1,77 @@
+Here are the exact steps to execute and test your Leave Management System from scratch:
+
+---
+
+### 1. Start PostgreSQL and the FastAPI app
+
+In your project root, run:
+```bash
+docker-compose up --build
+```
+This will start both the database and the FastAPI app.
+
+---
+
+### 2. Initialize Alembic and Create the Database Schema
+
+Open a new terminal and run:
+```bash
+alembic init alembic
+```
+Edit `alembic/env.py` and set:
+```python
+from app.db.base import Base
+target_metadata = Base.metadata
+```
+Then run:
+```bash
+alembic revision --autogenerate -m "init"
+alembic upgrade head
+```
+This will create all tables in your database.
+
+---
+
+### 3. Register a New User
+
+You don’t need any pre-existing login details. Use the API to register a user:
+
+- Open Swagger docs at [http://localhost:8000/docs](http://localhost:8000/docs)
+- Use the `/api/v1/auth/register` endpoint to create a new user (e.g., as an Employee or Manager).
+
+Example JSON:
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com",
+  "password": "alicepassword",
+  "role": "Employee"
+}
+```
+
+---
+
+### 4. Log In
+
+Use the `/api/v1/auth/login` endpoint with your email and password to get a JWT token.
+
+---
+
+### 5. Test the API
+
+- Use the JWT token (as `Bearer <token>`) in the Authorize button in Swagger UI.
+- Try creating a leave request, approving, rejecting, etc.
+
+---
+
+### 6. Run Automated Tests
+
+In your terminal, run:
+```bash
+pytest
+```
+This will execute the provided test cases for registration, login, leave requests, and RBAC.
+
+---
+
+If you need help with any step (like editing `env.py` or using Swagger), let me know!
